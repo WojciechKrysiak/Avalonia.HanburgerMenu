@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="HamburgerMenu.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="HamburgerMenu.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.6.2-build6260-beta" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.6.2-build6260-beta" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.6.2-build6260-beta" />
+  </ItemGroup>
+
+</Project>

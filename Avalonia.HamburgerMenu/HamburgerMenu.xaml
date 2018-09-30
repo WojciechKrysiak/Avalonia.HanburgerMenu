@@ -1,0 +1,370 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:conv="clr-namespace:Avalonia.Markup.Xaml.Converters;assembly=Avalonia.Markup.Xaml"
+        xmlns:l="clr-namespace:Avalonia.HamburgerMenu;assembly=Avalonia.HamburgerMenu"
+        >
+
+    <Style Selector="l|HamburgerMenu ScrollViewer">
+        <Design.PreviewWith>
+            <l:HamburgerContainer Height="500"
+                                  Width="500" 
+                                  MenuSide="Left"
+                                  >
+                <Rectangle Fill="Teal">
+                    <l:HamburgerContainer.MenuItem>
+                        <l:HamburgerMenuItem Content="quux" />
+                    </l:HamburgerContainer.MenuItem>
+                </Rectangle>
+                <Rectangle MinHeight="100"
+                           MinWidth="100"
+                           Fill="Blue"
+                           >
+                    <l:HamburgerContainer.MenuItem>
+                        <l:HamburgerMenuItem Content="bar" IsOverlay="True" Icon="M -5.3196516e-4,0 V 7.997737 16 L 5.9975132,11.998857 11.999468,7.997737 10.814718,7.207451 5.9975132,3.9966168 Z M 1.5791357,3.15664 5.2115894,5.5772112 8.8401328,7.997737 5.2115894,10.418286 1.5791357,12.843337 v -4.8456 z"/>
+                    </l:HamburgerContainer.MenuItem>
+                </Rectangle>
+                <Rectangle Fill="Green">
+                    <l:HamburgerContainer.MenuItem>
+                        <l:HamburgerMenuItem Content="bas" />
+                    </l:HamburgerContainer.MenuItem>
+                </Rectangle>
+            </l:HamburgerContainer>
+        </Design.PreviewWith>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <ScrollContentPresenter Name="PART_ContentPresenter"
+                                            Background="{TemplateBinding Background}"
+                                            CanHorizontallyScroll="{TemplateBinding CanHorizontallyScroll}"
+                                            CanVerticallyScroll="{TemplateBinding CanVerticallyScroll}"
+                                            Content="{TemplateBinding Content}"
+                                            Extent="{TemplateBinding Extent,
+                                                                     Mode=TwoWay}"
+                                            Margin="{TemplateBinding Padding}"
+                                            Viewport="{TemplateBinding Viewport,
+                                                                       Mode=TwoWay}"
+                                            Offset="{TemplateBinding Offset,
+                                                                     Mode=TwoWay}"
+                                            />
+                    <ScrollBar Name="verticalScrollBar"
+                               HorizontalAlignment="Right"
+                               Maximum="{TemplateBinding VerticalScrollBarMaximum}"
+                               Orientation="Vertical"
+                               ViewportSize="{TemplateBinding VerticalScrollBarViewportSize}"
+                               Visibility="{TemplateBinding VerticalScrollBarVisibility}"
+                               Value="{TemplateBinding VerticalScrollBarValue,
+                                                       Mode=TwoWay}"
+                               />
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+
+    <Style Selector="l|HamburgerMenu ScrollViewer ScrollBar">
+        <Setter Property="Opacity" Value="0" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <DoubleTransition Duration="0:0:0.1" Property="Opacity" />
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <Style Selector="l|HamburgerMenu ScrollViewer:pointerover ScrollBar">
+        <Setter Property="Opacity" Value="1" />
+    </Style>
+
+
+    <Style Selector="l|HamburgerMenuItem">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <TextBlock FontSize="15"
+                               Margin="15"
+                               Text="{Binding}"
+                               />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid Height="{Binding RowHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type l:HamburgerMenu}}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Path Name="PART_OverlaySelected"
+                              Grid.Column="0"
+                              Grid.ColumnSpan="2"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Center"
+                              Data="M -5.3196516e-4,0 V 7.997737 16 L 5.9975132,11.998857 11.999468,7.997737 10.814718,7.207451 5.9975132,3.9966168 Z M 1.5791357,3.15664 5.2115894,5.5772112 8.8401328,7.997737 5.2115894,10.418286 1.5791357,12.843337 v -4.8456 z"
+                              />
+                        <Rectangle Name="PART_Selected"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   Width="5"
+                                   HorizontalAlignment="Left"
+                                   />
+                        <Border Name="__IconColumn"
+                                Width="{Binding IconWidth,
+                                                RelativeSource={RelativeSource FindAncestor,
+                                                                               AncestorType={x:Type l:HamburgerMenu}}}"
+                                Background="Transparent"
+                                >
+                            <ContentPresenter Name="PART_IconBlock"
+                                              Content="{TemplateBinding Icon}"
+                                              ContentTemplate="{TemplateBinding IconTemplate}"
+                                              >
+                                <ContentPresenter.Resources>
+                                    <l:GeometryConverter x:Key="ParseConverter" />
+                                </ContentPresenter.Resources>
+                                <ContentPresenter.DataTemplates>
+                                    <DataTemplate DataType="{x:Type Control}" />
+                                    <DataTemplate DataType="{x:Type sys:String}">
+                                        <Path Height="30"
+                                              Width="30"
+                                              Data="{Binding Converter={StaticResource ParseConverter}}"
+                                              Fill="White"
+                                              Margin="10"
+                                              Stretch="Uniform"
+                                              />
+                                    </DataTemplate>
+                                </ContentPresenter.DataTemplates>
+                            </ContentPresenter>
+                        </Border>
+                        <Border Name="__StringColumn"
+                                Width="{Binding CurrentLabelWidth,
+                                                RelativeSource={RelativeSource FindAncestor,
+                                                                               AncestorType={x:Type l:HamburgerMenu}}}"
+                                Background="Transparent"
+                                >
+                            <ContentPresenter Name="PART_ContentBlock"
+                                              Content="{TemplateBinding Content}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              />
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style Selector="l|HamburgerMenuItem:selected Rectangle#PART_Selected">
+        <Setter Property="Fill" Value="Green" />
+    </Style>
+
+    <Style Selector="l|HamburgerMenuItem[IsOverlay=True]:selected Path#PART_OverlaySelected">
+        <Setter Property="Fill" Value="Green" />
+        <Setter Property="Stroke" Value="Green" />
+    </Style>
+
+    <Style Selector="l|HamburgerMenu">
+        <Setter Property="CurrentLabelWidth" Value="0" />
+        <Setter Property="IsExpanded" Value="False" />
+        <Setter Property="Background" Value="Black" />
+        <Setter Property="TextBlock.Foreground" Value="White" />
+        <Setter Property="HeaderIcon" Value="M112,6H12C5.4,6,0,11.4,0,18s5.4,12,12,12h100c6.6,0,12-5.4,12-12S118.6,6,112,6z                         M112,50H12C5.4,50,0,55.4,0,62c0,6.6,5.4,12,12,12h100c6.6,0,12-5.4,12-12C124,55.4,118.6,50,112,50z                         M112,94H12c-6.6,0-12,5.4-12,12s5.4,12,12,12h100c6.6,0,12-5.4,12-12S118.6,94,112,94z" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}">
+                        <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,*">
+                            <Border Name="__IconColumn"
+                                    Grid.Row="0"
+                                    Height="{TemplateBinding RowHeight}"
+                                    Width="{TemplateBinding IconWidth}"
+                                    >
+                                <ContentPresenter Name="PART_IconPresenter"
+                                                  Background="Transparent"
+                                                  Content="{TemplateBinding HeaderIcon}"
+                                                  >
+                                    <ContentPresenter.Resources>
+                                        <l:GeometryConverter x:Key="ParseConverter" />
+                                    </ContentPresenter.Resources>
+                                    <ContentPresenter.DataTemplates>
+                                        <DataTemplate DataType="{x:Type Control}" />
+                                        <DataTemplate DataType="{x:Type sys:String}">
+                                            <Path Height="30"
+                                                  Width="30"
+                                                  Data="{Binding Converter={StaticResource ParseConverter}}"
+                                                  Fill="White"
+                                                  Margin="10"
+                                                  Stretch="Uniform"
+                                                  />
+                                        </DataTemplate>
+                                    </ContentPresenter.DataTemplates>
+                                </ContentPresenter>
+                            </Border>
+                            <Border Name="__StringColumn"
+                                    Grid.Row="0"
+                                    Height="{TemplateBinding RowHeight}"
+                                    Width="{TemplateBinding CurrentLabelWidth}"
+                                    Background="Fuchsia"
+                                    >
+                                <ContentPresenter Name="PART_HeaderPresenter"
+                                                  Background="Transparent"
+                                                  Content="{TemplateBinding Header}"
+                                                  />
+                            </Border>
+                            <ScrollViewer Grid.Column="0"
+                                          Grid.ColumnSpan="2"
+                                          Grid.Row="1"
+                                          VerticalAlignment="Stretch"
+                                          HorizontalScrollBarVisibility="Disabled"
+                                          VerticalScrollBarVisibility="Auto"
+                                          >
+                                <ItemsPresenter Name="PART_ItemsPresenter"
+                                                ItemTemplate="{TemplateBinding ItemTemplate}"
+                                                Items="{TemplateBinding Items}"
+                                                ItemsPanel="{TemplateBinding ItemsPanel}"
+                                                />
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Transitions">
+            <Transitions>
+                <DoubleTransition Duration="0:0:0.1" Property="CurrentLabelWidth" />
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <Style Selector="l|HamburgerMenu[MenuSide=Left] /template/ Border#__IconColumn">
+        <Setter Property="Grid.Column" Value="0" />
+    </Style>
+
+    <Style Selector="l|HamburgerMenu[MenuSide=Right] /template/ Border#__IconColumn">
+        <Setter Property="Grid.Column" Value="1" />
+    </Style>
+
+
+    <Style Selector="l|HamburgerMenu[MenuSide=Left] #__StringColumn">
+        <Setter Property="Grid.Column" Value="1" />
+    </Style>
+
+    <Style Selector="l|HamburgerMenu[MenuSide=Right] #__StringColumn">
+        <Setter Property="Grid.Column" Value="0" />
+    </Style>
+
+
+    <Style Selector="l|HamburgerMenu[IsExpanded=True]">
+        <Setter Property="CurrentLabelWidth" Value="{Binding LabelWidth, RelativeSource={RelativeSource Self}, Mode=OneWay}" />
+    </Style>
+
+    <Style Selector="l|HamburgerMenu[IsExpanded=False]">
+        <Setter Property="CurrentLabelWidth" Value="0" />
+
+    </Style>
+
+    <Style Selector="l|HamburgerContainer">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+    </Style>
+
+
+    <Style Selector="l|HamburgerContainer">
+
+        <Setter Property="Background" Value="Black" />
+        <Setter Property="TextBlock.Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid ColumnDefinitions="Auto,Auto,*">
+                        <ContentPresenter Name="PART_MainPresenter"
+                                          Grid.Column="2"
+                                          HorizontalAlignment="Stretch"
+                                          VerticalAlignment="Stretch"
+                                          />
+                        <Grid Grid.Column="2"
+                              ColumnDefinitions="Auto,*"
+                              RowDefinitions="Auto,Auto,*"
+                              >
+                            <Rectangle Grid.Column="0"
+                                       Grid.Row="0"
+                                       Height="{TemplateBinding OverlayVerticalOffset}"
+                                       Fill="{x:Null}"
+                                       />
+                            <Rectangle Name="PART_OverlayShadow"
+                                       Grid.Column="0"
+                                       Grid.ColumnSpan="2"
+                                       Grid.Row="0"
+                                       Grid.RowSpan="3"
+                                       HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Stretch"
+                                       Fill="Black"
+                                       IsVisible="{Binding !!Content,
+                                                           ElementName=PART_OverlayPresenter}"
+                                       Opacity="0.2"
+                                       />
+                            <ContentPresenter Name="PART_OverlayPresenter"
+                                              Grid.Column="0"
+                                              Grid.Row="1"
+                                              HorizontalAlignment="Left"
+                                              VerticalAlignment="Top"
+                                              />
+                        </Grid>
+                        <l:HamburgerMenu Name="PART_Menu"
+                                         Grid.Column="0"
+                                         Grid.ColumnSpan="2"
+                                         VerticalAlignment="Stretch"
+                                         MenuSide="{TemplateBinding MenuSide}"
+                                         />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style Selector="l|HamburgerContainer[MenuSide=Right]">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid ColumnDefinitions="*,Auto,Auto">
+                        <Grid Grid.Column="2"
+                              ColumnDefinitions="Auto,*"
+                              RowDefinitions="Auto,Auto,*"
+                              >
+                            <Rectangle Grid.Column="1"
+                                       Grid.Row="0"
+                                       Height="{TemplateBinding OverlayVerticalOffset}"
+                                       Fill="{x:Null}"
+                                       />
+                            <Rectangle Name="PART_OverlayShadow"
+                                       Grid.Column="0"
+                                       Grid.ColumnSpan="2"
+                                       Grid.Row="0"
+                                       Grid.RowSpan="3"
+                                       HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Stretch"
+                                       Fill="Black"
+                                       IsVisible="{Binding !!Content,
+                                                           ElementName=PART_OverlayPresenter}"
+                                       Opacity="0.2"
+                                       />
+                            <ContentPresenter Name="PART_OverlayPresenter"
+                                              Grid.Column="1"
+                                              Grid.Row="1"
+                                              HorizontalAlignment="Right"
+                                              VerticalAlignment="Top"
+                                              />
+                        </Grid>
+                        <l:HamburgerMenu Name="PART_Menu"
+                                         Grid.Column="1"
+                                         Grid.ColumnSpan="2"
+                                         VerticalAlignment="Stretch"
+                                         MenuSide="{TemplateBinding MenuSide}"
+                                         />
+
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</Styles>
